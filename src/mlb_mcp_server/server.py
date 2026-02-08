@@ -5,6 +5,7 @@ from typing import Dict, List, Type, TypeVar
 from mcp.server.fastmcp import FastMCP
 from pydantic import BaseModel
 
+from mlb_mcp_server.constants import BREF_DATA_PATH, STATS_DATA_PATH
 from mlb_mcp_server.models import BRef, Statcast
 
 mcp = FastMCP("Statcast")
@@ -26,12 +27,12 @@ def read_csv_to_model(file_path: str, model: Type[T]) -> Dict:
 
 @mcp.tool()
 def get_statcast_data() -> dict:
-    return read_csv_to_model("data/stats.csv", Statcast)
+    return read_csv_to_model(STATS_DATA_PATH, Statcast)
 
 
 @mcp.tool()
 def get_bref_data() -> dict:
-    return read_csv_to_model("data/bref.csv", BRef)
+    return read_csv_to_model(BREF_DATA_PATH, BRef)
 
 
 # Run the server
