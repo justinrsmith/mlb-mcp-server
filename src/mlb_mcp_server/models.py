@@ -435,3 +435,197 @@ class PitchingStats(BaseModel):
     model_config = ConfigDict(
         populate_by_name=True
     )  # Allows using both alias and field name
+
+
+class TeamPitchingStats(BaseModel):
+    """
+    Comprehensive team pitching statistics model optimized for MCP tools.
+    Structured identically to PitchingStats but for team-level aggregates.
+    """
+
+    # ========== IDENTITY ==========
+    teamIDfg: int = Field(..., description="FanGraphs Team ID")
+    Season: int
+    Team: str
+    Age: Optional[int] = Field(None, description="Average Team Age")
+
+    # ========== BASIC COUNTING STATS ==========
+    W: int = Field(..., description="Wins")
+    L: int = Field(..., description="Losses")
+    ERA: float = Field(..., description="Earned Run Average")
+    G: int = Field(..., description="Games")
+    GS: int = Field(..., description="Games Started")
+    CG: Optional[int] = Field(None, description="Complete Games")
+    ShO: Optional[int] = Field(None, description="Shutouts")
+    SV: Optional[int] = Field(None, description="Saves")
+
+    IP: float = Field(..., description="Innings Pitched")
+    H: int = Field(..., description="Hits Allowed")
+    R: int = Field(..., description="Runs Allowed")
+    ER: int = Field(..., description="Earned Runs")
+    HR: int = Field(..., description="Home Runs Allowed")
+    BB: int = Field(..., description="Walks")
+    IBB: Optional[int] = Field(None, description="Intentional Walks")
+    SO: int = Field(..., description="Strikeouts")
+    HBP: Optional[int] = Field(None, description="Hit By Pitch")
+    WP: Optional[int] = Field(None, description="Wild Pitches")
+    BK: Optional[int] = Field(None, description="Balks")
+
+    TBF: Optional[int] = Field(None, description="Total Batters Faced")
+    Pitches: Optional[int] = Field(None, description="Total Pitches Thrown")
+    Balls: Optional[int] = Field(None, description="Balls Thrown")
+    Strikes: Optional[int] = Field(None, description="Strikes Thrown")
+
+    # ========== TRADITIONAL RATE STATS ==========
+    WHIP: Optional[float] = Field(None, description="Walks + Hits per Inning Pitched")
+    BABIP: Optional[float] = Field(None, description="Batting Average on Balls in Play")
+    LOB_pct: Optional[float] = Field(
+        None, alias="LOB%", description="Left on Base Percentage"
+    )
+
+    K_9: Optional[float] = Field(None, alias="K/9", description="Strikeouts per 9")
+    BB_9: Optional[float] = Field(None, alias="BB/9", description="Walks per 9")
+    HR_9: Optional[float] = Field(None, alias="HR/9", description="Home Runs per 9")
+    K_BB: Optional[float] = Field(None, alias="K/BB", description="K/BB Ratio")
+
+    # ========== ADVANCED METRICS ==========
+    FIP: Optional[float] = Field(None, description="Fielding Independent Pitching")
+    xFIP: Optional[float] = Field(None, description="Expected FIP")
+    SIERA: Optional[float] = Field(None, description="Skill-Interactive ERA")
+    xERA: Optional[float] = Field(None, description="Expected ERA")
+
+    # ========== BATTED BALL DATA ==========
+    GB: Optional[int] = Field(None, description="Ground Balls")
+    FB: Optional[int] = Field(None, description="Fly Balls")
+    LD: Optional[int] = Field(None, description="Line Drives")
+    IFFB: Optional[int] = Field(None, description="Infield Fly Balls")
+
+    GB_pct: Optional[float] = Field(None, alias="GB%", description="Ground Ball %")
+    FB_pct: Optional[float] = Field(None, alias="FB%", description="Fly Ball %")
+    LD_pct: Optional[float] = Field(None, alias="LD%", description="Line Drive %")
+    IFFB_pct: Optional[float] = Field(None, alias="IFFB%", description="IFFB %")
+    HR_FB: Optional[float] = Field(None, alias="HR/FB", description="HR per Fly Ball")
+
+    # ========== VALUE METRICS ==========
+    WAR: Optional[float] = Field(None, description="Wins Above Replacement")
+    RA9_WAR: Optional[float] = Field(
+        None, alias="RA9-WAR", description="RA9 Wins Above Replacement"
+    )
+
+    # ========== LEAGUE-ADJUSTED STATS (Plus Stats) ==========
+    ERA_plus: Optional[int] = Field(None, alias="ERA+", description="ERA+")
+    FIP_plus: Optional[int] = Field(None, alias="FIP+", description="FIP+")
+    BABIP_plus: Optional[int] = Field(None, alias="BABIP+", description="BABIP+")
+    LOB_pct_plus: Optional[int] = Field(None, alias="LOB%+", description="LOB%+")
+    K_pct_plus: Optional[int] = Field(None, alias="K%+", description="K%+")
+    BB_pct_plus: Optional[int] = Field(None, alias="BB%+", description="BB%+")
+    GB_pct_plus: Optional[int] = Field(None, alias="GB%+", description="GB%+")
+    FB_pct_plus: Optional[int] = Field(None, alias="FB%+", description="FB%+")
+    LD_pct_plus: Optional[int] = Field(None, alias="LD%+", description="LD%+")
+    HR_FB_pct_plus: Optional[int] = Field(None, alias="HR/FB%+", description="HR/FB%+")
+
+    # ========== PITCH QUALITY METRICS ==========
+    Stuff_plus: Optional[int] = Field(None, alias="Stuff+", description="Stuff+")
+    Location_plus: Optional[int] = Field(
+        None, alias="Location+", description="Location+"
+    )
+    Pitching_plus: Optional[int] = Field(
+        None, alias="Pitching+", description="Pitching+"
+    )
+
+    model_config = ConfigDict(populate_by_name=True)
+
+
+class TeamBattingStats(BaseModel):
+    """
+    Comprehensive team batting statistics model optimized for MCP tools.
+    Structured identically to BattingStats but for team-level aggregates.
+    """
+
+    # ========== IDENTITY ==========
+    teamIDfg: int = Field(..., description="FanGraphs Team ID")
+    Season: int
+    Team: str
+    Age: Optional[int] = Field(None, description="Average Team Age")
+
+    # ========== BASIC COUNTING STATS ==========
+    G: int = Field(..., description="Games")
+    AB: int = Field(..., description="At Bats")
+    PA: int = Field(..., description="Plate Appearances")
+    H: int = Field(..., description="Hits")
+    R: int = Field(..., description="Runs")
+    RBI: int = Field(..., description="Runs Batted In")
+
+    BB: int = Field(..., description="Walks")
+    IBB: Optional[int] = Field(None, description="Intentional Walks")
+    SO: int = Field(..., description="Strikeouts")
+    HBP: Optional[int] = Field(None, description="Hit By Pitch")
+    SF: Optional[int] = Field(None, description="Sacrifice Flies")
+    SH: Optional[int] = Field(None, description="Sacrifice Hits/Bunts")
+    GDP: Optional[int] = Field(None, description="Grounded into Double Play")
+
+    SB: Optional[int] = Field(None, description="Stolen Bases")
+    CS: Optional[int] = Field(None, description="Caught Stealing")
+
+    # ========== TRADITIONAL RATE STATS ==========
+    AVG: float = Field(..., description="Batting Average")
+    OBP: float = Field(..., description="On Base Percentage")
+    SLG: float = Field(..., description="Slugging Percentage")
+    OPS: float = Field(..., description="On Base Plus Slugging")
+    ISO: Optional[float] = Field(None, description="Isolated Power")
+    BABIP: Optional[float] = Field(None, description="Batting Average on Balls in Play")
+
+    BB_pct: Optional[float] = Field(None, alias="BB%", description="Walk Percentage")
+    K_pct: Optional[float] = Field(None, alias="K%", description="Strikeout Percentage")
+    BB_K: Optional[float] = Field(
+        None, alias="BB/K", description="Walk to Strikeout Ratio"
+    )
+
+    # ========== ADVANCED METRICS ==========
+    wOBA: Optional[float] = Field(None, description="Weighted On Base Average")
+    wRAA: Optional[float] = Field(None, description="Weighted Runs Above Average")
+    wRC: Optional[int] = Field(None, description="Weighted Runs Created")
+    wRC_plus: Optional[int] = Field(
+        None, alias="wRC+", description="Weighted Runs Created Plus"
+    )
+
+    # ========== BATTED BALL DATA ==========
+    GB: Optional[int] = Field(None, description="Ground Balls")
+    FB: Optional[int] = Field(None, description="Fly Balls")
+    LD: Optional[int] = Field(None, description="Line Drives")
+    IFFB: Optional[int] = Field(None, description="Infield Fly Balls")
+
+    GB_FB: Optional[float] = Field(
+        None, alias="GB/FB", description="Ground Ball to Fly Ball Ratio"
+    )
+    LD_pct: Optional[float] = Field(
+        None, alias="LD%", description="Line Drive Percentage"
+    )
+    GB_pct: Optional[float] = Field(
+        None, alias="GB%", description="Ground Ball Percentage"
+    )
+    FB_pct: Optional[float] = Field(
+        None, alias="FB%", description="Fly Ball Percentage"
+    )
+    HR_FB: Optional[float] = Field(
+        None, alias="HR/FB", description="Home Run per Fly Ball"
+    )
+
+    # ========== VALUE METRICS ==========
+    WAR: Optional[float] = Field(None, description="Wins Above Replacement")
+    RAR: Optional[float] = Field(None, description="Runs Above Replacement")
+
+    Bat: Optional[float] = Field(None, description="Batting Runs")
+    Fld: Optional[float] = Field(None, description="Fielding Runs")
+    Rep: Optional[float] = Field(None, description="Replacement Runs")
+    Pos: Optional[float] = Field(None, description="Positional Adjustment")
+
+    # ========== WIN PROBABILITY ==========
+    WPA: Optional[float] = Field(None, description="Win Probability Added")
+    WPA_LI: Optional[float] = Field(None, alias="WPA/LI", description="WPA per LI")
+    RE24: Optional[float] = Field(None, description="Run Expectancy 24 Base-Out States")
+
+    # ========== BASERUNNING ==========
+    Spd: Optional[float] = Field(None, description="Speed Score")
+
+    model_config = ConfigDict(populate_by_name=True)

@@ -2,11 +2,16 @@ from typing import Callable, List, Type, TypeVar
 
 import pandas as pd
 from mcp.server.fastmcp import FastMCP
-from pybaseball import batting_stats, pitching_stats
+from pybaseball import batting_stats, pitching_stats, team_batting, team_pitching
 from pydantic import BaseModel
 
 from mlb_mcp_server.constants import BATTING_PRESETS, PITCHING_PRESETS
-from mlb_mcp_server.models import BattingStats, PitchingStats
+from mlb_mcp_server.models import (
+    BattingStats,
+    PitchingStats,
+    TeamBattingStats,
+    TeamPitchingStats,
+)
 
 mcp = FastMCP("Statcast")
 
@@ -229,6 +234,92 @@ def pitching_stats_by_year(
     """
     return _fetch_stats_by_year(
         year, pitching_stats, PitchingStats, page, page_size, fields
+    )
+
+
+@mcp.tool()
+def team_pitching_stats_by_year(
+    year: int, page: int = 1, page_size: int = 10, fields: str = "basic"
+) -> dict:
+    """
+    Retrieve MLB team-level pitching statistics for a specific regular season year.
+
+    This tool returns paginated team-level pitching statistics sourced from
+    pybaseball. Results include all 30 MLB teams, so pagination is optional but
+    available for consistency with other endpoints.
+
+    Parameters:
+        year (int):
+            Four-digit MLB season year (e.g., 2023).
+        page (int, default=1):
+            Page number for pagination. Must be >= 1.
+        page_size (int, default=10):
+            Number of team records per page. Since there are only 30 teams, this can
+            be set to 30 to return all teams in one page.
+        fields (str, default="basic"):
+            Which fields to return. Options:
+            - "basic": Core stats (Team, W, L, ERA, IP, SO, WHIP, etc.)
+            - "advanced": Advanced metrics (FIP, xFIP, SIERA, K%, WAR, etc.)
+            - "statcast": Statcast data (EV, LA, Barrel%, xwOBA, xERA, etc.)
+            - "all": All available fields (WARNING: large payload, use small page_size)
+            - Custom: Comma-separated field names (e.g., "Team,ERA,WHIP,WAR")
+    Returns:
+        dict with the following structure:
+
+        {
+            "year": int,
+            "total_rows": int,        # total number of teams in dataset (should be 30)
+            "page": int,
+            "page_size": int,
+            "total_pages": int,
+            "data": List[dict]         # list of team pitching stat records
+        }
+    """
+    return _fetch_stats_by_year(
+        year, team_pitching, TeamPitchingStats, page, page_size, fields
+    )
+
+
+@mcp.tool()
+def team_batting_stats_by_year(
+    year: int, page: int = 1, page_size: int = 10, fields: str = "basic"
+) -> dict:
+    """
+    Retrieve MLB team-level batting statistics for a specific regular season year.
+
+    This tool returns paginated team-level batting statistics sourced from
+    pybaseball. Results include all 30 MLB teams, so pagination is optional but
+    available for consistency with other endpoints.
+
+    Parameters:
+        year (int):
+            Four-digit MLB season year (e.g., 2023).
+        page (int, default=1):
+            Page number for pagination. Must be >= 1.
+        page_size (int, default=10):
+            Number of team records per page. Since there are only 30 teams, this can
+            be set to 30 to return all teams in one page.
+        fields (str, default="basic"):
+            Which fields to return. Options:
+            - "basic": Core stats (Team, W, L, ERA, IP, SO, WHIP, etc.)
+            - "advanced": Advanced metrics (FIP, xFIP, SIERA, K%, WAR, etc.)
+            - "statcast": Statcast data (EV, LA, Barrel%, xwOBA, xERA, etc.)
+            - "all": All available fields (WARNING: large payload, use small page_size)
+            - Custom: Comma-separated field names (e.g., "Team,ERA,WHIP,WAR")
+    Returns:
+        dict with the following structure:
+
+        {
+            "year": int,
+            "total_rows": int,        # total number of teams in dataset (should be 30)
+            "page": int,
+            "page_size": int,
+            "total_pages": int,
+            "data": List[dict]         # list of team batting stat records
+        }
+    """
+    return _fetch_stats_by_year(
+        year, team_batting, TeamBattingStats, page, page_size, fields
     )
 
 

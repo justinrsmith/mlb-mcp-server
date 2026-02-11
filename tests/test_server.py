@@ -8,6 +8,8 @@ import pytest
 from mlb_mcp_server.server import (
     batting_stats_by_year,
     pitching_stats_by_year,
+    team_batting_stats_by_year,
+    team_pitching_stats_by_year,
 )
 
 
@@ -23,6 +25,26 @@ def batting_stats_fixture():
 def pitching_stats_fixture():
     """Load pitching stats fixture data"""
     fixture_path = Path(__file__).parent / "fixtures" / "pitching_stats_fixture.json"
+    with open(fixture_path, "r") as f:
+        return json.load(f)
+
+
+@pytest.fixture
+def team_batting_stats_fixture():
+    """Load team batting stats fixture data"""
+    fixture_path = (
+        Path(__file__).parent / "fixtures" / "team_batting_stats_fixture.json"
+    )
+    with open(fixture_path, "r") as f:
+        return json.load(f)
+
+
+@pytest.fixture
+def team_pitching_stats_fixture():
+    """Load team pitching stats fixture data"""
+    fixture_path = (
+        Path(__file__).parent / "fixtures" / "team_pitching_stats_fixture.json"
+    )
     with open(fixture_path, "r") as f:
         return json.load(f)
 
@@ -357,3 +379,59 @@ def test_field_filtering_reduces_payload_size(
         assert basic_fields < all_fields
         assert custom_fields < basic_fields
         assert custom_fields <= 5  # Name, Team, HR + IDfg, Season
+
+
+@patch("mlb_mcp_server.server.team_batting")
+def test_team_batting_stats_by_year(mock_batting_stats, team_batting_stats_fixture):
+    mock_batting_stats.return_value = pd.DataFrame(team_batting_stats_fixture)
+
+    result = team_batting_stats_by_year(2023)
+
+    # Assert - Response structure
+    assert "year" in result
+    assert "total_rows" in result
+    assert "page" in result
+    assert "page_size" in result
+    assert "data" in result
+
+    # Assert - Response values
+    assert result["year"] == 2023
+    assert result["total_rows"] == len(team_batting_stats_fixture)
+    assert result["page"] == 1
+    assert result["page_size"] == 10
+    assert len(result["data"]) == 10
+
+    # Assert - Data content (verify Pydantic worked)
+    assert isinstance(result["data"], list)
+    assert len(result["data"]) > 0
+
+    # Assert - Mock was called correctly
+    mock_batting_stats.assert_called_once_with(2023)
+
+
+@patch("mlb_mcp_server.server.team_pitching")
+def test_team_pitching_stats_by_year(mock_pitching_stats, team_pitching_stats_fixture):
+    mock_pitching_stats.return_value = pd.DataFrame(team_pitching_stats_fixture)
+
+    result = team_pitching_stats_by_year(2023)
+
+    # Assert - Response structure
+    assert "year" in result
+    assert "total_rows" in result
+    assert "page" in result
+    assert "page_size" in result
+    assert "data" in result
+
+    # Assert - Response values
+    assert result["year"] == 2023
+    assert result["total_rows"] == len(team_pitching_stats_fixture)
+    assert result["page"] == 1
+    assert result["page_size"] == 10
+    assert len(result["data"]) == 10
+
+    # Assert - Data content (verify Pydantic worked)
+    assert isinstance(result["data"], list)
+    assert len(result["data"]) > 0
+
+    # Assert - Mock was called correctly
+    mock_pitching_stats.assert_called_once_with(2023)
