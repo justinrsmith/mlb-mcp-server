@@ -6,6 +6,8 @@ readme = "README.md"
 requires-python = ">=3.14.3"
 dependencies = [
     "mcp[cli]>=1.26.0",
+    "pandas-stubs>=3.0.0.260204",
+    "pybaseball>=2.2.7",
     "pydantic>=2.12.5",
     "pytest>=9.0.2",
     "pytest-cov>=7.0.0",
@@ -36,3 +38,7 @@ exclude = [
 
 [tool.ruff.lint]
 extend-select = ["I"]
+
+[[tool.mypy.overrides]]
+module = ["pybaseball.*"]
+ignore_missing_imports = true
