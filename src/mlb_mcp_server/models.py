@@ -1,6 +1,6 @@
 from typing import Optional, Union
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, ConfigDict, Field
 
 
 class BattingStats(BaseModel):
@@ -213,8 +213,9 @@ class BattingStats(BaseModel):
     # Alternative WAR calculation
     L_WAR: Optional[float] = Field(None, alias="L-WAR", description="Alternative WAR")
 
-    class Config:
-        populate_by_name = True  # Allows using both alias and field name
+    model_config = ConfigDict(
+        populate_by_name=True
+    )  # Allows using both alias and field name
 
 
 class PitchingStats(BaseModel):
@@ -431,5 +432,6 @@ class PitchingStats(BaseModel):
     FIP_plus: Optional[int] = Field(None, alias="FIP+", description="FIP+")
     xFIP_plus: Optional[int] = Field(None, alias="xFIP+", description="xFIP+")
 
-    class Config:
-        populate_by_name = True  # Allows using both alias and field name
+    model_config = ConfigDict(
+        populate_by_name=True
+    )  # Allows using both alias and field name
