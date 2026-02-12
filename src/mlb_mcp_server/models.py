@@ -553,6 +553,7 @@ class TeamBattingStats(BaseModel):
     AB: int = Field(..., description="At Bats")
     PA: int = Field(..., description="Plate Appearances")
     H: int = Field(..., description="Hits")
+    HR: int = Field(..., description="Home Runs")
     R: int = Field(..., description="Runs")
     RBI: int = Field(..., description="Runs Batted In")
 

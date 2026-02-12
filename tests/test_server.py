@@ -382,6 +382,67 @@ def test_field_filtering_reduces_payload_size(
 
 
 @patch("mlb_mcp_server.server.team_batting")
+def test_team_batting_stats_field_filtering_basic(
+    mock_team_batting, team_batting_stats_fixture
+):
+    """Test that team batting 'basic' preset returns batting fields, not pitching fields."""
+    mock_team_batting.return_value = pd.DataFrame(team_batting_stats_fixture)
+
+    result = team_batting_stats_by_year(2023, fields="basic")
+
+    assert len(result["data"]) > 0
+    first_team = result["data"][0]
+
+    # Should include team identity fields (teamIDfg, not IDfg)
+    assert "teamIDfg" in first_team
+    assert "Season" in first_team
+
+    # Should include basic batting fields
+    assert "Team" in first_team
+    assert "G" in first_team
+    assert "AB" in first_team
+    assert "H" in first_team
+    assert "HR" in first_team
+    assert "AVG" in first_team
+    assert "OPS" in first_team
+
+    # Should NOT include pitching-only fields (proves wrong preset isn't used)
+    assert "ERA" not in first_team
+    assert "W" not in first_team
+    assert "WHIP" not in first_team
+
+
+@patch("mlb_mcp_server.server.team_pitching")
+def test_team_pitching_stats_field_filtering_basic(
+    mock_team_pitching, team_pitching_stats_fixture
+):
+    """Test that team pitching 'basic' preset returns pitching fields."""
+    mock_team_pitching.return_value = pd.DataFrame(team_pitching_stats_fixture)
+
+    result = team_pitching_stats_by_year(2023, fields="basic")
+
+    assert len(result["data"]) > 0
+    first_team = result["data"][0]
+
+    # Should include team identity fields (teamIDfg, not IDfg)
+    assert "teamIDfg" in first_team
+    assert "Season" in first_team
+
+    # Should include basic pitching fields
+    assert "Team" in first_team
+    assert "W" in first_team
+    assert "L" in first_team
+    assert "ERA" in first_team
+    assert "IP" in first_team
+    assert "SO" in first_team
+    assert "WHIP" in first_team
+
+    # Should NOT include batting-only fields
+    assert "AB" not in first_team
+    assert "RBI" not in first_team
+
+
+@patch("mlb_mcp_server.server.team_batting")
 def test_team_batting_stats_by_year(mock_batting_stats, team_batting_stats_fixture):
     mock_batting_stats.return_value = pd.DataFrame(team_batting_stats_fixture)
 

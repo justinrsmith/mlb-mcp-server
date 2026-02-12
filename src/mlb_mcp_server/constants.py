@@ -1,5 +1,9 @@
 """Constants and configuration for MLB MCP Server."""
 
+# Identity fields always included in filtered results
+PLAYER_IDENTITY_FIELDS = ["IDfg", "Season"]
+TEAM_IDENTITY_FIELDS = ["teamIDfg", "Season"]
+
 # Field presets for batting statistics
 BATTING_PRESETS = {
     "basic": [
@@ -114,4 +118,95 @@ PITCHING_PRESETS = {
         "xwOBA",
         "xERA",
     ],
+}
+
+# Field presets for team batting statistics
+TEAM_BATTING_PRESETS = {
+    "basic": [
+        "Team",
+        "Age",
+        "G",
+        "AB",
+        "PA",
+        "H",
+        "HR",
+        "R",
+        "RBI",
+        "BB",
+        "SO",
+        "SB",
+        "AVG",
+        "OBP",
+        "SLG",
+        "OPS",
+    ],
+    "advanced": [
+        "Team",
+        "G",
+        "PA",
+        "wOBA",
+        "wRC",
+        "wRC+",
+        "WAR",
+        "OPS",
+        "ISO",
+        "BABIP",
+        "BB%",
+        "K%",
+        "AVG",
+        "OBP",
+        "SLG",
+    ],
+}
+
+# Field presets for team pitching statistics
+TEAM_PITCHING_PRESETS = {
+    "basic": [
+        "Team",
+        "Age",
+        "W",
+        "L",
+        "ERA",
+        "G",
+        "GS",
+        "IP",
+        "H",
+        "R",
+        "ER",
+        "HR",
+        "BB",
+        "SO",
+        "WHIP",
+        "K/9",
+        "BB/9",
+    ],
+    "advanced": [
+        "Team",
+        "G",
+        "IP",
+        "ERA",
+        "FIP",
+        "xFIP",
+        "SIERA",
+        "K%",
+        "BB%",
+        "WAR",
+        "WHIP",
+        "LOB%",
+    ],
+}
+
+# Maps model names to their preset and identity field configurations
+PRESET_MAP = {
+    "BattingStats": BATTING_PRESETS,
+    "PitchingStats": PITCHING_PRESETS,
+    "TeamBattingStats": TEAM_BATTING_PRESETS,
+    "TeamPitchingStats": TEAM_PITCHING_PRESETS,
+}
+
+IDENTITY_FIELD_MAP = {
+    "BattingStats": PLAYER_IDENTITY_FIELDS,
+    "PitchingStats": PLAYER_IDENTITY_FIELDS,
+    "TeamBattingStats": TEAM_IDENTITY_FIELDS,
+    "TeamPitchingStats": TEAM_IDENTITY_FIELDS,
 }

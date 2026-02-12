@@ -5,7 +5,12 @@ from mcp.server.fastmcp import FastMCP
 from pybaseball import batting_stats, pitching_stats, team_batting, team_pitching
 from pydantic import BaseModel
 
-from mlb_mcp_server.constants import BATTING_PRESETS, PITCHING_PRESETS
+from mlb_mcp_server.constants import (
+    BATTING_PRESETS,
+    IDENTITY_FIELD_MAP,
+    PLAYER_IDENTITY_FIELDS,
+    PRESET_MAP,
+)
 from mlb_mcp_server.models import (
     BattingStats,
     PitchingStats,
@@ -105,12 +110,13 @@ def _filter_fields(data: List[dict], fields: str, model_name: str) -> List[dict]
     Args:
         data: List of dictionaries to filter
         fields: Field specification (preset or comma-separated list)
-        model_name: Name of the model ("BattingStats" or "PitchingStats")
+        model_name: Name of the model (e.g. "BattingStats", "TeamPitchingStats")
 
     Returns:
         Filtered list of dictionaries
     """
-    presets = BATTING_PRESETS if model_name == "BattingStats" else PITCHING_PRESETS
+    presets = PRESET_MAP.get(model_name, BATTING_PRESETS)
+    identity_fields = IDENTITY_FIELD_MAP.get(model_name, PLAYER_IDENTITY_FIELDS)
 
     # Determine which fields to keep
     if fields in presets:
@@ -119,8 +125,8 @@ def _filter_fields(data: List[dict], fields: str, model_name: str) -> List[dict]
         # Treat as comma-separated list of field names
         keep_fields = set(f.strip() for f in fields.split(","))
 
-    # Always include IDfg and Season for identification
-    keep_fields.update(["IDfg", "Season"])
+    # Always include identity fields
+    keep_fields.update(identity_fields)
 
     # Filter each record
     filtered_data = []
