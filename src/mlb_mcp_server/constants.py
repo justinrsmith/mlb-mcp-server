@@ -1,9 +1,212 @@
-from pathlib import Path
+"""Constants and configuration for MLB MCP Server."""
 
-# Package directory
-PACKAGE_DIR = Path(__file__).parent
+# Identity fields always included in filtered results
+PLAYER_IDENTITY_FIELDS = ["IDfg", "Season"]
+TEAM_IDENTITY_FIELDS = ["teamIDfg", "Season"]
 
-# Data file paths
-DATA_DIR = PACKAGE_DIR / "data"
-BREF_DATA_PATH = DATA_DIR / "bref.csv"
-STATS_DATA_PATH = DATA_DIR / "stats.csv"
+# Field presets for batting statistics
+BATTING_PRESETS = {
+    "basic": [
+        "Name",
+        "Team",
+        "Age",
+        "Pos",
+        "G",
+        "AB",
+        "PA",
+        "H",
+        "1B",
+        "2B",
+        "3B",
+        "HR",
+        "R",
+        "RBI",
+        "BB",
+        "SO",
+        "SB",
+        "AVG",
+        "OBP",
+        "SLG",
+        "OPS",
+    ],
+    "advanced": [
+        "Name",
+        "Team",
+        "G",
+        "PA",
+        "wOBA",
+        "wRC",
+        "wRC+",
+        "WAR",
+        "OPS",
+        "ISO",
+        "BABIP",
+        "BB%",
+        "K%",
+        "AVG",
+        "OBP",
+        "SLG",
+    ],
+    "statcast": [
+        "Name",
+        "Team",
+        "G",
+        "PA",
+        "EV",
+        "LA",
+        "Barrels",
+        "Barrel%",
+        "maxEV",
+        "HardHit",
+        "HardHit%",
+        "xBA",
+        "xSLG",
+        "xwOBA",
+    ],
+}
+
+# Field presets for pitching statistics
+PITCHING_PRESETS = {
+    "basic": [
+        "Name",
+        "Team",
+        "Age",
+        "Pos",
+        "W",
+        "L",
+        "ERA",
+        "G",
+        "GS",
+        "IP",
+        "H",
+        "R",
+        "ER",
+        "HR",
+        "BB",
+        "SO",
+        "WHIP",
+        "K/9",
+        "BB/9",
+    ],
+    "advanced": [
+        "Name",
+        "Team",
+        "G",
+        "IP",
+        "ERA",
+        "FIP",
+        "xFIP",
+        "SIERA",
+        "K%",
+        "BB%",
+        "K-BB%",
+        "WAR",
+        "WHIP",
+        "LOB%",
+    ],
+    "statcast": [
+        "Name",
+        "Team",
+        "G",
+        "IP",
+        "EV",
+        "LA",
+        "Barrel%",
+        "HardHit%",
+        "xBA",
+        "xSLG",
+        "xwOBA",
+        "xERA",
+    ],
+}
+
+# Field presets for team batting statistics
+TEAM_BATTING_PRESETS = {
+    "basic": [
+        "Team",
+        "Age",
+        "G",
+        "AB",
+        "PA",
+        "H",
+        "HR",
+        "R",
+        "RBI",
+        "BB",
+        "SO",
+        "SB",
+        "AVG",
+        "OBP",
+        "SLG",
+        "OPS",
+    ],
+    "advanced": [
+        "Team",
+        "G",
+        "PA",
+        "wOBA",
+        "wRC",
+        "wRC+",
+        "WAR",
+        "OPS",
+        "ISO",
+        "BABIP",
+        "BB%",
+        "K%",
+        "AVG",
+        "OBP",
+        "SLG",
+    ],
+}
+
+# Field presets for team pitching statistics
+TEAM_PITCHING_PRESETS = {
+    "basic": [
+        "Team",
+        "Age",
+        "W",
+        "L",
+        "ERA",
+        "G",
+        "GS",
+        "IP",
+        "H",
+        "R",
+        "ER",
+        "HR",
+        "BB",
+        "SO",
+        "WHIP",
+        "K/9",
+        "BB/9",
+    ],
+    "advanced": [
+        "Team",
+        "G",
+        "IP",
+        "ERA",
+        "FIP",
+        "xFIP",
+        "SIERA",
+        "K%",
+        "BB%",
+        "WAR",
+        "WHIP",
+        "LOB%",
+    ],
+}
+
+# Maps model names to their preset and identity field configurations
+PRESET_MAP = {
+    "BattingStats": BATTING_PRESETS,
+    "PitchingStats": PITCHING_PRESETS,
+    "TeamBattingStats": TEAM_BATTING_PRESETS,
+    "TeamPitchingStats": TEAM_PITCHING_PRESETS,
+}
+
+IDENTITY_FIELD_MAP = {
+    "BattingStats": PLAYER_IDENTITY_FIELDS,
+    "PitchingStats": PLAYER_IDENTITY_FIELDS,
+    "TeamBattingStats": TEAM_IDENTITY_FIELDS,
+    "TeamPitchingStats": TEAM_IDENTITY_FIELDS,
+}
