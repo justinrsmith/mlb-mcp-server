@@ -264,9 +264,8 @@ def team_pitching_stats_by_year(
             be set to 30 to return all teams in one page.
         fields (str, default="basic"):
             Which fields to return. Options:
-            - "basic": Core stats (Team, W, L, ERA, IP, SO, WHIP, etc.)
+            - "basic": Core stats (Team, W, L, ERA, G, IP, SO, WHIP, K/9, etc.)
             - "advanced": Advanced metrics (FIP, xFIP, SIERA, K%, WAR, etc.)
-            - "statcast": Statcast data (EV, LA, Barrel%, xwOBA, xERA, etc.)
             - "all": All available fields (WARNING: large payload, use small page_size)
             - Custom: Comma-separated field names (e.g., "Team,ERA,WHIP,WAR")
     Returns:
@@ -307,11 +306,10 @@ def team_batting_stats_by_year(
             be set to 30 to return all teams in one page.
         fields (str, default="basic"):
             Which fields to return. Options:
-            - "basic": Core stats (Team, W, L, ERA, IP, SO, WHIP, etc.)
-            - "advanced": Advanced metrics (FIP, xFIP, SIERA, K%, WAR, etc.)
-            - "statcast": Statcast data (EV, LA, Barrel%, xwOBA, xERA, etc.)
+            - "basic": Core stats (Team, G, AB, H, HR, RBI, AVG, OPS, etc.)
+            - "advanced": Advanced metrics (wOBA, wRC+, WAR, ISO, BABIP, etc.)
             - "all": All available fields (WARNING: large payload, use small page_size)
-            - Custom: Comma-separated field names (e.g., "Team,ERA,WHIP,WAR")
+            - Custom: Comma-separated field names (e.g., "Team,AVG,OPS,HR")
     Returns:
         dict with the following structure:
 
