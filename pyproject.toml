@@ -9,13 +9,14 @@ dependencies = [
     "pandas-stubs>=3.0.0.260204",
     "pybaseball>=2.2.7",
     "pydantic>=2.12.5",
-    "pytest>=9.0.2",
-    "pytest-cov>=7.0.0",
 ]
 
 [dependency-groups]
 dev = [
     "mypy>=1.19.1",
+    "pytest>=9.0.2",
+    "pytest-asyncio>=1.3.0",
+    "pytest-cov>=7.0.0",
     "ruff>=0.15.0",
 ]
 
@@ -29,6 +30,7 @@ packages = ["src/mlb_mcp_server"]
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
+asyncio_mode = "auto"
 
 [tool.mypy]
 disallow_untyped_defs = true

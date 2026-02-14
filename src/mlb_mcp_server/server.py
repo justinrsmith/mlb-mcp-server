@@ -1,3 +1,4 @@
+import asyncio
 from typing import Callable, List, Type, TypeVar
 
 import pandas as pd
@@ -23,7 +24,7 @@ mcp = FastMCP("Statcast")
 T = TypeVar("T", bound=BaseModel)
 
 
-def _fetch_stats_by_year(
+async def _fetch_stats_by_year(
     year: int,
     stats_func: Callable[[int], pd.DataFrame],
     model_cls: Type[T],
@@ -50,7 +51,7 @@ def _fetch_stats_by_year(
     """
     # Get data from pybaseball
     try:
-        df = stats_func(year)
+        df = await asyncio.to_thread(stats_func, year)
     except Exception as e:
         return {"error": str(e)}
 
@@ -138,7 +139,7 @@ def _filter_fields(data: List[dict], fields: str, model_name: str) -> List[dict]
 
 
 @mcp.tool()
-def batting_stats_by_year(
+async def batting_stats_by_year(
     year: int, page: int = 1, page_size: int = 10, fields: str = "basic"
 ) -> dict:
     """
@@ -185,13 +186,13 @@ def batting_stats_by_year(
         - Use field filtering to avoid large payloads that may cause errors in Claude Desktop.
         - IDfg and Season are always included for player identification.
     """
-    return _fetch_stats_by_year(
+    return await _fetch_stats_by_year(
         year, batting_stats, BattingStats, page, page_size, fields
     )
 
 
 @mcp.tool()
-def pitching_stats_by_year(
+async def pitching_stats_by_year(
     year: int, page: int = 1, page_size: int = 10, fields: str = "basic"
 ) -> dict:
     """
@@ -238,13 +239,13 @@ def pitching_stats_by_year(
         - Use field filtering to avoid large payloads that may cause errors in Claude Desktop.
         - IDfg and Season are always included for player identification.
     """
-    return _fetch_stats_by_year(
+    return await _fetch_stats_by_year(
         year, pitching_stats, PitchingStats, page, page_size, fields
     )
 
 
 @mcp.tool()
-def team_pitching_stats_by_year(
+async def team_pitching_stats_by_year(
     year: int, page: int = 1, page_size: int = 10, fields: str = "basic"
 ) -> dict:
     """
@@ -280,13 +281,13 @@ def team_pitching_stats_by_year(
             "data": List[dict]         # list of team pitching stat records
         }
     """
-    return _fetch_stats_by_year(
+    return await _fetch_stats_by_year(
         year, team_pitching, TeamPitchingStats, page, page_size, fields
     )
 
 
 @mcp.tool()
-def team_batting_stats_by_year(
+async def team_batting_stats_by_year(
     year: int, page: int = 1, page_size: int = 10, fields: str = "basic"
 ) -> dict:
     """
@@ -322,7 +323,7 @@ def team_batting_stats_by_year(
             "data": List[dict]         # list of team batting stat records
         }
     """
-    return _fetch_stats_by_year(
+    return await _fetch_stats_by_year(
         year, team_batting, TeamBattingStats, page, page_size, fields
     )
 
