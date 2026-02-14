@@ -1,0 +1,44 @@
+[
+  [
+    {"Tm": "New York Yankees", "W": "94", "L": "68", "W-L%": ".580", "GB": "--"},
+    {"Tm": "Baltimore Orioles", "W": "91", "L": "71", "W-L%": ".562", "GB": "3.0"},
+    {"Tm": "Boston Red Sox", "W": "81", "L": "81", "W-L%": ".500", "GB": "13.0"},
+    {"Tm": "Tampa Bay Rays", "W": "80", "L": "82", "W-L%": ".494", "GB": "14.0"},
+    {"Tm": "Toronto Blue Jays", "W": "74", "L": "88", "W-L%": ".457", "GB": "20.0"}
+  ],
+  [
+    {"Tm": "Cleveland Guardians", "W": "92", "L": "69", "W-L%": ".571", "GB": "--"},
+    {"Tm": "Kansas City Royals", "W": "86", "L": "76", "W-L%": ".531", "GB": "6.5"},
+    {"Tm": "Detroit Tigers", "W": "86", "L": "76", "W-L%": ".531", "GB": "6.5"},
+    {"Tm": "Minnesota Twins", "W": "82", "L": "80", "W-L%": ".506", "GB": "10.5"},
+    {"Tm": "Chicago White Sox", "W": "41", "L": "121", "W-L%": ".253", "GB": "51.5"}
+  ],
+  [
+    {"Tm": "Houston Astros", "W": "88", "L": "73", "W-L%": ".547", "GB": "--"},
+    {"Tm": "Seattle Mariners", "W": "85", "L": "77", "W-L%": ".525", "GB": "3.5"},
+    {"Tm": "Texas Rangers", "W": "78", "L": "84", "W-L%": ".481", "GB": "10.5"},
+    {"Tm": "Oakland Athletics", "W": "69", "L": "93", "W-L%": ".426", "GB": "19.5"},
+    {"Tm": "Los Angeles Angels", "W": "63", "L": "99", "W-L%": ".389", "GB": "25.5"}
+  ],
+  [
+    {"Tm": "Philadelphia Phillies", "W": "95", "L": "67", "W-L%": ".586", "GB": "--"},
+    {"Tm": "Atlanta Braves", "W": "89", "L": "73", "W-L%": ".549", "GB": "6.0"},
+    {"Tm": "New York Mets", "W": "89", "L": "73", "W-L%": ".549", "GB": "6.0"},
+    {"Tm": "Washington Nationals", "W": "71", "L": "91", "W-L%": ".438", "GB": "24.0"},
+    {"Tm": "Miami Marlins", "W": "62", "L": "100", "W-L%": ".383", "GB": "33.0"}
+  ],
+  [
+    {"Tm": "Milwaukee Brewers", "W": "93", "L": "69", "W-L%": ".574", "GB": "--"},
+    {"Tm": "Chicago Cubs", "W": "83", "L": "79", "W-L%": ".512", "GB": "10.0"},
+    {"Tm": "St. Louis Cardinals", "W": "83", "L": "79", "W-L%": ".512", "GB": "10.0"},
+    {"Tm": "Cincinnati Reds", "W": "77", "L": "85", "W-L%": ".475", "GB": "16.0"},
+    {"Tm": "Pittsburgh Pirates", "W": "76", "L": "86", "W-L%": ".469", "GB": "17.0"}
+  ],
+  [
+    {"Tm": "Los Angeles Dodgers", "W": "98", "L": "64", "W-L%": ".605", "GB": "--"},
+    {"Tm": "San Diego Padres", "W": "93", "L": "69", "W-L%": ".574", "GB": "5.0"},
+    {"Tm": "Arizona Diamondbacks", "W": "89", "L": "73", "W-L%": ".549", "GB": "9.0"},
+    {"Tm": "San Francisco Giants", "W": "80", "L": "82", "W-L%": ".494", "GB": "18.0"},
+    {"Tm": "Colorado Rockies", "W": "61", "L": "101", "W-L%": ".377", "GB": "37.0"}
+  ]
+]

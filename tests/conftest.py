@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 
+import pandas as pd
 import pytest
 
 
@@ -38,3 +39,13 @@ def team_pitching_stats_fixture():
     )
     with open(fixture_path, "r") as f:
         return json.load(f)
+
+
+@pytest.fixture
+def standings_fixture():
+    """Load standings fixture data (list of division DataFrames)"""
+    fixture_path = Path(__file__).parent / "fixtures" / "standings_fixture.json"
+    with open(fixture_path, "r") as f:
+        data = json.load(f)
+    # Convert each division's list of dicts into a DataFrame (matches pybaseball output)
+    return [pd.DataFrame(division) for division in data]
