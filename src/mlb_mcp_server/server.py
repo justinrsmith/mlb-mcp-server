@@ -3,11 +3,18 @@ from typing import Callable, List, Type, TypeVar
 
 import pandas as pd
 from mcp.server.fastmcp import FastMCP
-from pybaseball import batting_stats, pitching_stats, team_batting, team_pitching
+from pybaseball import (
+    batting_stats,
+    pitching_stats,
+    standings,
+    team_batting,
+    team_pitching,
+)
 from pydantic import BaseModel
 
 from mlb_mcp_server.constants import (
     BATTING_PRESETS,
+    DIVISION_NAMES,
     IDENTITY_FIELD_MAP,
     PLAYER_IDENTITY_FIELDS,
     PRESET_MAP,
@@ -15,6 +22,7 @@ from mlb_mcp_server.constants import (
 from mlb_mcp_server.models import (
     BattingStats,
     PitchingStats,
+    StandingsRecord,
     TeamBattingStats,
     TeamPitchingStats,
 )
@@ -326,6 +334,55 @@ async def team_batting_stats_by_year(
     return await _fetch_stats_by_year(
         year, team_batting, TeamBattingStats, page, page_size, fields
     )
+
+
+@mcp.tool()
+async def standings_by_year(year: int) -> dict:
+    """
+    Retrieve MLB standings for a specific season year.
+
+    Returns all 30 MLB teams organized by division with win-loss records.
+    The data is sourced from Baseball Reference via pybaseball.
+
+    Parameters:
+        year (int):
+            Four-digit MLB season year (e.g., 2024).
+
+    Returns:
+        dict with the following structure:
+
+        {
+            "year": int,
+            "total_teams": int,
+            "data": List[dict]  # each dict has: Tm, W, L, W-L%, GB, Division
+        }
+
+    Notes:
+        - Teams are ordered by division, then by win-loss record within each division.
+        - GB (Games Back) is relative to the division leader and returned as a string.
+    """
+    try:
+        division_dfs = await asyncio.to_thread(standings, year)
+    except Exception as e:
+        return {"error": str(e)}
+
+    all_teams = []
+    for division_name, df in zip(DIVISION_NAMES, division_dfs):
+        df = df.copy()
+        df["Division"] = division_name
+        all_teams.append(df)
+
+    combined = pd.concat(all_teams, ignore_index=True)
+    records = combined.to_dict("records")
+
+    models = [StandingsRecord.model_validate(row) for row in records]
+    data = [m.model_dump(mode="json") for m in models]
+
+    return {
+        "year": year,
+        "total_teams": len(data),
+        "data": data,
+    }
 
 
 # Run the server

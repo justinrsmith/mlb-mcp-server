@@ -536,6 +536,19 @@ class TeamPitchingStats(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
 
+class StandingsRecord(BaseModel):
+    """Single team standings row from Baseball Reference via pybaseball."""
+
+    Tm: str = Field(..., description="Team name")
+    W: str = Field(..., description="Wins")
+    L: str = Field(..., description="Losses")
+    W_L_pct: str = Field(..., alias="W-L%", description="Win-Loss percentage")
+    GB: str = Field(..., description="Games Back")
+    Division: str = Field(..., description="Division name")
+
+    model_config = ConfigDict(populate_by_name=True)
+
+
 class TeamBattingStats(BaseModel):
     """
     Comprehensive team batting statistics model optimized for MCP tools.

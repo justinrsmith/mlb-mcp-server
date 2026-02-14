@@ -1,5 +1,14 @@
 """Constants and configuration for MLB MCP Server."""
 
+DIVISION_NAMES = [
+    "AL East",
+    "AL Central",
+    "AL West",
+    "NL East",
+    "NL Central",
+    "NL West",
+]
+
 # Identity fields always included in filtered results
 PLAYER_IDENTITY_FIELDS = ["IDfg", "Season"]
 TEAM_IDENTITY_FIELDS = ["teamIDfg", "Season"]

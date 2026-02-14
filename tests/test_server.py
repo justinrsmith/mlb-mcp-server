@@ -1,10 +1,13 @@
+from collections import Counter
 from unittest.mock import patch
 
 import pandas as pd
 
+from mlb_mcp_server.constants import DIVISION_NAMES
 from mlb_mcp_server.server import (
     batting_stats_by_year,
     pitching_stats_by_year,
+    standings_by_year,
     team_batting_stats_by_year,
     team_pitching_stats_by_year,
 )
@@ -349,3 +352,54 @@ class TestTeamPitchingStats:
         # Should NOT include batting-only fields
         assert "AB" not in first_team
         assert "RBI" not in first_team
+
+
+class TestStandings:
+    @patch("mlb_mcp_server.server.standings")
+    async def test_basic_response(self, mock_standings, standings_fixture):
+        mock_standings.return_value = standings_fixture
+
+        result = await standings_by_year(2024)
+
+        assert result["year"] == 2024
+        assert result["total_teams"] == 30
+        assert len(result["data"]) == 30
+
+        first_team = result["data"][0]
+        assert "Tm" in first_team
+        assert "W" in first_team
+        assert "L" in first_team
+        assert "W_L_pct" in first_team
+        assert "GB" in first_team
+        assert "Division" in first_team
+
+        mock_standings.assert_called_once_with(2024)
+
+    @patch("mlb_mcp_server.server.standings")
+    async def test_divisions_present(self, mock_standings, standings_fixture):
+        mock_standings.return_value = standings_fixture
+
+        result = await standings_by_year(2024)
+
+        divisions = {team["Division"] for team in result["data"]}
+        assert divisions == set(DIVISION_NAMES)
+
+    @patch("mlb_mcp_server.server.standings")
+    async def test_five_teams_per_division(self, mock_standings, standings_fixture):
+        mock_standings.return_value = standings_fixture
+
+        result = await standings_by_year(2024)
+
+        division_counts = Counter(team["Division"] for team in result["data"])
+        for division, count in division_counts.items():
+            assert count == 5, f"{division} has {count} teams, expected 5"
+
+    @patch("mlb_mcp_server.server.standings")
+    async def test_exception(self, mock_standings):
+        mock_standings.side_effect = Exception("Data fetch error")
+
+        result = await standings_by_year(2024)
+
+        assert "error" in result
+        assert result["error"] == "Data fetch error"
+        mock_standings.assert_called_once_with(2024)
